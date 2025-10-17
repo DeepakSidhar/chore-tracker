@@ -1,0 +1,19 @@
+[project]
+name = "chore-tracker"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "C:/Users/dsidh", email = "sidhardeepak@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.118.2",
+]
+
+[project.scripts]
+chore-tracker = "chore_tracker.__main__:main"
+
+[build-system]
+requires = ["uv_build>=0.8.22,<0.9.0"]
+build-backend = "uv_build"
