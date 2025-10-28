@@ -1,52 +1,37 @@
 import sys
+from turtledemo.penrose import start
 
 from chore_tracker.chore import Chore, Chore2
 import json
 
-"""
+from chore_tracker.data import Data
+from chore_tracker.reward import Reward
 
 
-chore_list = []
-def create_chore(chore):
-    print('Create')
-    chore_list.append(chore)
-
-def list_chores():
-    print('List of chores ')
-    for chore in chore_list:
-        print(chore)
-def complete_chore():
-    print('Complete chore')
-"""
 def menu() -> str:
     print('Create Chore 1')
     print('List Chores 2')
     print('Completed Chore 3')
-    print('Exit the app 4 ')
+    print('Reward Status 4')
+    print('Exit the app 5 ')
     choice  = input('Please enter a number :')
     return choice
 
-def load_chores(file_name:str) -> list:
-    try:
-        with open(file_name) as f:
-            items = json.load(f)
-            chores = [Chore2.from_dict(item) for item in items]
 
-    except Exception as error:
-        print(error)
-        chores = []
+'''
 
-    return chores
+def reward_status(name, file_name):
+    status = 0
+    chores = load_chores(file_name)
+    for chore in chores :
+        if chore.owner == name and chore.finished != None :
+            status +=2
 
-def save_chores(chores : list, file_name):
-    with open(file_name, 'w') as f:
-        json.dump([chore.as_dict() for chore in chores ], f)
-
-
-
+    return f' The current award is {status} dollars '
+'''
 def main():
     file_name = 'chores.json'
-    chores = load_chores(file_name)
+    chores = Data.load_chores(file_name)
     print('The project has started')
     name = input('please enter a name :')
 
@@ -65,12 +50,25 @@ def main():
             continue
         if choice == '3':
             chore = input('Please enter the number for the  chore that is completed :')
-            index = int(chore) # try and except type error
-            chores[index].finish()  # try catch of indeix out of bound
+            try :
+                index = int(chore) - 1
+
+            except ValueError:
+                print(f'This is not a valid entry {chore}')
+
+            try :
+                chores[index].finish()  # try catch of indeix out of bound
+            except IndexError :
+                print('Not valid option please try again')
 
             continue
         if choice == '4':
-            save_chores(chores, file_name)
+            Data.save_chores(chores, file_name)
+            print(Reward.reward_status(name, file_name))
+
+            continue
+        if choice == '5':
+            Data.save_chores(chores, file_name)
             print(f'Saved to {file_name}')
 
             break
@@ -85,11 +83,3 @@ if __name__ == "__main__":
     main()
 
 
-'''
-Add a chore 
-complete a chore 
-each chore completed needs to have 2 HKD  a max of 10 HKD per day
-minus the number from the total 
-
-
-'''

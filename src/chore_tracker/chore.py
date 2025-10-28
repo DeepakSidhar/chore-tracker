@@ -43,6 +43,7 @@ class Chore:
         else:
             return False
 
+
 class Chore2:
 
     @classmethod
